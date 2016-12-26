@@ -1,4 +1,5 @@
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
+<?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
 
 <?php
   // PERFORM DB QUERY
@@ -6,9 +7,7 @@
   $result = mysqli_query($db, $query); #=> collection of database rows
 
   // Test if there was a query error
-  if(!$result) {
-    die("Database query failed.");
-  }
+  confirm_query($result);
 ?>
 
 <?php include("../includes/layouts/header.php"); // HEADER ?>

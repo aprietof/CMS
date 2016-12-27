@@ -1,6 +1,6 @@
 <?php
 
-  // Test if there was a query error
+  // TEST IF QUERY ERROR
   function confirm_query ($result_set) {
     if(!$result_set) {
       die("Database query failed.");
@@ -30,6 +30,11 @@
 
     $pages_set = mysqli_query($db, $query); #=> collection of database rows
     return $pages_set;
+  }
+
+  // DEFINE SELECTED CLASS
+  function selected_class($selected, $page){
+    return $class = (isset($selected) && isset($page) && $selected == $page["id"]) ? "selected" : "";
   }
 
 

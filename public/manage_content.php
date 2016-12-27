@@ -26,8 +26,10 @@
       <?php
         // USE RETURNED DATA (IF ANY)
         while ($subject = mysqli_fetch_assoc($subjects_set)) { // increment the pointer
+
           // output data from each row
-          echo "<li><a href=\"manage_content.php?subject=" . urlencode($subject["id"]) . "\">{$subject["menu_name"]}</a>";
+          echo "<li class=" . selected_class($selected_subject, $subject) . ">";
+          echo "<a href=\"manage_content.php?subject=" . urlencode($subject["id"]) . "\">{$subject["menu_name"]}</a>";
 
           // PERFORM PAGES DB QUERY
           $pages_set = find_all_pages($subject["id"]);
@@ -37,7 +39,8 @@
 
           while ($page = mysqli_fetch_assoc($pages_set)) { // increment the pointer
             // output data from each row
-            echo "<li><a href=\"manage_content.php?page=" . urlencode($page["id"]) . "\">{$page["menu_name"]}</a></li>";
+            echo "<li class=". selected_class($selected_page, $page) .">";
+            echo "<a href=\"manage_content.php?page=" . urlencode($page["id"]) . "\">{$page["menu_name"]}</a></li>";
           }
 
           mysqli_free_result($pages_set); // RELEASE PAGES RETURNED DB

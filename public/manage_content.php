@@ -21,9 +21,11 @@
       if ($current_subject) {
         echo "<h2>Manage Content</h2>";
         echo "Menu Name: {$current_subject["menu_name"]}<br/>";
+        echo "<a href=\"edit_subject.php?subject={$current_subject["id"]}\" >Edit Subject</a>";
       } elseif ($current_page) {
         echo "<h2>Manage Page</h2>";
         echo "Page Name: {$current_page["menu_name"]}<br/>";
+        echo "<a href=\"edit_page.php?page={$current_page["id"]}\" >Edit Page</a>";
       } else {
         echo "Please select a subject or a page";
       }

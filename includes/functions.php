@@ -1,5 +1,11 @@
 <?php
 
+  // REDIRECT TO NEW PAGE
+  function redirect_to($new_location) {
+    header("Location: " . $new_location);
+    exit;
+  }
+
   // TEST IF QUERY ERROR
   function confirm_query ($result_set) {
     if(!$result_set) {
@@ -12,7 +18,7 @@
 
     global $db; #=> GLOBAL DATABASE
 
-    // PERFORM SUBJECTS DB QUERY
+    // SUBJECTS QUERY
     $query = "SELECT * FROM subjects ORDER BY position ASC";
     $subjects_set = mysqli_query($db, $query); #=> collection of database rows
     confirm_query($subjects_set);

@@ -7,6 +7,18 @@
 ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
+<?php
+  // CHECK FOR PAGE CONTENT
+  $selected_subject = NULL;
+  $selected_page = NULL;
+
+  if (isset($_GET["subject"])) {
+    $selected_subject = $_GET["subject"];
+  } elseif (isset($_GET["page"])) {
+    $selected_page = $_GET["page"];
+  }
+?>
+
 <div id="main">
   <div id="navigation">
 
@@ -40,6 +52,9 @@
   </div>
   <div id="page">
     <h2>Manage Content</h2>
+
+      <?php echo $selected_subject; ?>
+      <?php echo $selected_page; ?>
 
   </div>
 </div>

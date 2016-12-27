@@ -1,15 +1,10 @@
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
-
 <?php
   // PERFORM SUBJECTS DB QUERY
-  $query = "SELECT * FROM subjects WHERE visible = 1";
-  $result = mysqli_query($db, $query); #=> collection of database rows
-
-  // Test if there was a query error
-  confirm_query($result);
+  $subjects_set = find_all_subjects();
+  confirm_query($subjects_set);
 ?>
-
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
 <div id="main">
@@ -18,30 +13,28 @@
     <ul class="subjects">
       <?php
         // USE RETURNED DATA (IF ANY)
-        while ($subject = mysqli_fetch_assoc($result)) { // increment the pointer
+        while ($subject = mysqli_fetch_assoc($subjects_set)) { // increment the pointer
           // output data from each row
-          echo "<li>{$subject["menu_name"]}";
+          echo "<li><a href=\"manage_content.php?subject=" . urlencode($subject["id"]) . "\">{$subject["menu_name"]}</a>";
 
           // PERFORM PAGES DB QUERY
-          $query = "SELECT * FROM pages WHERE visible = 1 AND subject_id = {$subject["id"]} ORDER BY position ASC";
-          $page_set = mysqli_query($db, $query); #=> collection of database rows
+          $pages_set = find_all_pages($subject["id"]);
+          confirm_query($pages_set);
 
-          // Test if there was a query error
-          confirm_query($page_set);
-          echo "<ul class='pages'>";
+          echo "<ul class=\"pages\">";
 
-          while ($page = mysqli_fetch_assoc($page_set)) { // increment the pointer
+          while ($page = mysqli_fetch_assoc($pages_set)) { // increment the pointer
             // output data from each row
-            echo "<li>{$page["menu_name"]}</li>";
+            echo "<li><a href=\"manage_content.php?page=" . urlencode($page["id"]) . "\">{$page["menu_name"]}</a></li>";
           }
 
-          mysqli_free_result($page_set); // RELEASE PAGES RETURNED DB
+          mysqli_free_result($pages_set); // RELEASE PAGES RETURNED DB
 
           echo "</ul>";
           echo "</li>";
         }
       ?>
-      <?php mysqli_free_result($result); // RELEASE RETURNED DB ?>
+      <?php mysqli_free_result($subjects_set); // RELEASE RETURNED DB ?>
     </ul>
 
   </div>

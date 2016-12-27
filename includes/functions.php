@@ -13,6 +13,22 @@
     }
   }
 
+  // DISPLAY FORM ERRORS
+  function form_errors($errors) {
+    $html = "";
+    if (!empty($errors)) {
+      $html .= "<div class='error'>";
+      $html .= "<p>Please fix the following errors</p>";
+      $html .= "<ul>";
+      foreach ($errors as $key => $error) {
+        $html .= "<li>{$error}</li>";
+      }
+      $html .= "</ul>";
+      $html .= "</div>";
+    }
+    return $html;
+  }
+
   // PERFORM SUBJECTS DB QUERY
   function find_all_subjects() {
 

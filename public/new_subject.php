@@ -12,6 +12,7 @@
   <div id="page">
 
     <?php echo message(); // Session Message (if any) ?>
+    <?php echo form_errors(errors()); // Session errors (if any) ?>
 
     <h2>Create Subject</h2>
 

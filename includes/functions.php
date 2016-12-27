@@ -19,6 +19,11 @@
     return $subjects_set;
   }
 
+  // RETURN SUBJECTS COUNT
+  function subjects_count() {
+    return mysqli_num_rows(find_all_subjects());
+  }
+
   // PERFORM PAGES DB QUERY
   function find_all_pages($subject_id) {
 
@@ -35,8 +40,8 @@
   }
 
   // DEFINE SELECTED CLASS
-  function selected_class($selected, $page){
-    return $class = (isset($selected) && isset($page) && $selected == $page["id"]) ? "selected" : "";
+  function selected_class($selected_page_id, $page){
+    return $class = (isset($selected_page_id) && isset($page) && $selected_page_id == $page["id"]) ? "selected" : "";
   }
 
   // CHECK FOR PAGE CONTENT

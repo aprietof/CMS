@@ -29,36 +29,9 @@
     return $html;
   }
 
-  // PERFORM SUBJECTS DB QUERY
-  function find_all_subjects() {
-
-    global $db; #=> GLOBAL DATABASE
-
-    // SUBJECTS QUERY
-    $query = "SELECT * FROM subjects ORDER BY position ASC";
-    $subjects_set = mysqli_query($db, $query); #=> collection of database rows
-    confirm_query($subjects_set);
-    return $subjects_set;
-  }
-
   // RETURN SUBJECTS COUNT
   function subjects_count() {
     return mysqli_num_rows(find_all_subjects());
-  }
-
-  // PERFORM PAGES DB QUERY
-  function find_all_pages($subject_id) {
-
-    global $db; #=> GLOBAL DATABASE
-    $safe_subject_id = mysqli_real_escape_string($db, $subject_id);
-
-    $query = "SELECT * FROM pages
-              WHERE visible = 1
-              AND subject_id = {$safe_subject_id}
-              ORDER BY position ASC";
-
-    $pages_set = mysqli_query($db, $query); #=> collection of database rows
-    return $pages_set;
   }
 
   // DEFINE SELECTED CLASS
@@ -100,7 +73,7 @@
           $output .= "<a href=\"manage_content.php?subject=" . urlencode($subject["id"]) . "\">{$subject["menu_name"]}</a>";
 
           // PERFORM PAGES DB QUERY
-          $pages_set = find_all_pages($subject["id"]);
+          $pages_set = find_pages_for_subject($subject["id"]);
           confirm_query($pages_set);
 
           $output .= "<ul class=\"pages\">";
@@ -122,7 +95,24 @@
     return $output;
   }
 
-  // PERFORM SUBJECT DB QUERY BY ID
+
+  #----------- CRUD FUNCTIONS ----------- #
+
+  // * SUBJECTS *
+
+  // PERFORM SUBJECTS DATABASE QUERY
+  function find_all_subjects() {
+
+    global $db; #=> GLOBAL DATABASE
+
+    // SUBJECTS QUERY
+    $query = "SELECT * FROM subjects ORDER BY position ASC";
+    $subjects_set = mysqli_query($db, $query); #=> collection of database rows
+    confirm_query($subjects_set);
+    return $subjects_set;
+  }
+
+  // PERFORM SUBJECT DATABASE QUERY BY ID
   function find_subject_by_id($subject_id) {
 
     global $db; #=> GLOBAL DATABASE
@@ -138,26 +128,7 @@
     }
   }
 
-  // PERFORM PAGE DB QUERY BY ID
-  function find_page_by_id($page_id) {
-
-    global $db; #=> GLOBAL DATABASE
-    $safe_page_id = mysqli_real_escape_string($db, $page_id); #=> prevents sql injection
-
-    $query = "SELECT * FROM pages WHERE id = {$safe_page_id} LIMIT 1";
-    $page_set = mysqli_query($db, $query); #=> database row
-    confirm_query($page_set);
-    if ($page = mysqli_fetch_assoc($page_set)) {
-      return $page;
-    } else {
-      return NULL;
-    }
-  }
-
-
-  #### CRUD FUNCTIONS ####
-
-  function create_aubject() {
+  function create_subject() {
 
     global $db;
 
@@ -265,5 +236,70 @@
     }
   }
 
+  function delete_subject() {
+
+    global $db;
+
+    $current_subject = find_subject_by_id($_GET["subject"]);
+    if (!$current_subject) { redirect_to("manage_content.php"); }
+
+    $page_set = find_pages_for_subject($current_subject["id"]);
+
+    // CHECK IF SUBJECT HAS PAGES AND STOP DELETION IF TRUE
+    if (mysqli_num_rows($page_set) > 0) {
+      $_SESSION["message"] = "Can't delete subject with pages.";
+      redirect_to("manage_content.php?subject={$current_subject["id"]}");
+    }
+
+    $id = $current_subject["id"];
+    $query = "DELETE FROM subjects WHERE id = {$id} LIMIT 1";
+
+    $result = mysqli_query($db, $query);
+
+    // TEST IF THERE WAS A QUERY ERROR
+    if($result && mysqli_affected_rows($db) == 1) {
+      // Success
+      $_SESSION["message"] = "Subject deleted.";
+      redirect_to("manage_content.php");
+    }
+    else {
+      // Failure
+      $_SESSION["message"] = "Subject deletion failed.";
+      redirect_to("manage_content.php?subject={$id}");
+    }
+  }
+
+  // * PAGES *
+
+  // PERFORM PAGES DATABASE QUERY
+  function find_pages_for_subject($subject_id) {
+
+    global $db; #=> GLOBAL DATABASE
+    $safe_subject_id = mysqli_real_escape_string($db, $subject_id);
+
+    $query = "SELECT * FROM pages
+              WHERE visible = 1
+              AND subject_id = {$safe_subject_id}
+              ORDER BY position ASC";
+
+    $pages_set = mysqli_query($db, $query); #=> collection of database rows
+    return $pages_set;
+  }
+
+  // PERFORM PAGE DATABASE QUERY BY ID
+  function find_page_by_id($page_id) {
+
+    global $db; #=> GLOBAL DATABASE
+    $safe_page_id = mysqli_real_escape_string($db, $page_id); #=> prevents sql injection
+
+    $query = "SELECT * FROM pages WHERE id = {$safe_page_id} LIMIT 1";
+    $page_set = mysqli_query($db, $query); #=> database row
+    confirm_query($page_set);
+    if ($page = mysqli_fetch_assoc($page_set)) {
+      return $page;
+    } else {
+      return NULL;
+    }
+  }
 
 ?>

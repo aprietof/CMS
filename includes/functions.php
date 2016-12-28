@@ -34,6 +34,11 @@
     return mysqli_num_rows(find_all_subjects());
   }
 
+  // RETURN PAGES COUNT
+  function pages_count($subject_id) {
+    return mysqli_num_rows(find_pages_for_subject($subject_id));
+  }
+
   // DEFINE SELECTED CLASS
   function selected_class($selected_page_id, $page){
     return $class = (isset($selected_page_id) && isset($page) && $selected_page_id == $page["id"]) ? "selected" : "";
@@ -303,6 +308,62 @@
       return $page;
     } else {
       return NULL;
+    }
+  }
+
+  function create_page() {
+
+    global $errors;
+    global $db;
+
+    // CHECK IF FORM WAS SUBMITED
+    if (isset($_POST["submit"])) {
+
+      // Data to INSERT
+      $menu_name = $_POST["menu_name"];
+      $position = (int) $_POST["position"];
+      $visible = (int) $_POST["visible"];
+      $content =  $_POST["content"];
+      $subject_id = $_GET["subject"];
+
+      // Escape all strings for security and (" ' ") values
+      $menu_name = mysqli_real_escape_string($db, $menu_name);
+      $content = mysqli_real_escape_string($db, $content);
+
+      // Validations
+      $required_fields = array("menu_name", "position", "visible", "content");
+      validate_precences($required_fields);
+
+      $fields_with_max_lengths = array("menu_name" => 30);
+      validate_max_lengths($fields_with_max_lengths);
+
+      // Redirect if validation errors
+      if (!empty($errors)) {
+
+        // Add errors to session
+        $_SESSION["errors"] = $errors;
+        redirect_to("new_page.php?subject={$subject_id}");
+      }
+
+      // Perform database query
+      $query = "INSERT INTO pages (subject_id, menu_name, position, visible, content)
+                VALUES ({$subject_id}, '{$menu_name}', {$position}, {$visible}, '{$content}')";
+      $result = mysqli_query($db, $query); // collection of database rows
+
+      // Test if there was a query error
+      if($result) {
+        // Success
+        $_SESSION["message"] = "Page created.";
+        redirect_to("manage_content.php");
+      }
+      else {
+        // Failure
+        $_SESSION["message"] = "Page creation failed.";
+        redirect_to("new_page.php?subject={$subject_id}");
+      }
+    } else {
+      // THIS IS PROBABLY A GET REQUEST
+      redirect_to("manage_content.php");
     }
   }
 

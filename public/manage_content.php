@@ -27,7 +27,27 @@
         echo "Visible: ";
         echo $current_subject["visible"] == 1 ? "Yes <br/>" : "No <br/>";
         echo "<br/>";
-        echo "<a href=\"edit_subject.php?subject=" . urlencode($current_subject["id"]) . "\" >Edit Subject</a>";
+        echo "<a href=\"edit_subject.php?subject=" . urlencode($current_subject["id"]) . "\" >Edit Subject</a><br />";
+        echo "<br/><hr>";
+        echo "<h3>Pages in this subject:</h3>";
+        $pages_set = find_pages_for_subject($current_subject["id"]);
+        confirm_query($pages_set);
+
+        echo "<ul>";
+
+        while ($page = mysqli_fetch_assoc($pages_set)) { // increment the pointer
+          // output data from each row
+          echo "<li><a href=\"manage_content.php?page=" . urlencode($page["id"]);
+          echo "\">" . htmlentities($page["menu_name"]) . "</a></li>";
+        }
+
+        mysqli_free_result($pages_set); // RELEASE PAGES RETURNED DB
+
+        echo "</ul><br />";
+        echo "+ <a href=\"new_page.php?subject=";
+        echo $current_subject["id"];
+        echo "\">Add new page to this subject</a>";
+
       } elseif ($current_page) {
         echo "<h2>Manage Page</h2>";
         echo "Page Name: " . htmlentities($current_page["menu_name"]) . "<br/>";

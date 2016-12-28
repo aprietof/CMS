@@ -10,7 +10,7 @@
 
   // * Presence
   function has_presence($value) {
-    return isset($value) && !empty($value);
+    return isset($value) && $value !== "";
   }
 
   function validate_precences($required_fields) {

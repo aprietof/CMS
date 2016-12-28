@@ -367,4 +367,89 @@
     }
   }
 
+  function update_page($current_page) {
+
+    global $errors;
+    global $db;
+
+    // CHECK IF FORM WAS SUBMITED
+    if (isset($_POST["submit"])) {
+
+      // Validations
+      $required_fields = array("menu_name", "position", "visible", "position");
+      validate_precences($required_fields);
+
+      $fields_with_max_lengths = array("menu_name" => 30);
+      validate_max_lengths($fields_with_max_lengths);
+
+
+      if (empty($errors)) {
+
+        // PERFORM UPDATE
+        // Data to UPDATE
+        $id = $current_page["id"];
+        $subject_id = $current_page["subject_id"];
+        $menu_name = $_POST["menu_name"];
+        $position = (int) $_POST["position"];
+        $visible = (int) $_POST["visible"];
+        $content = $_POST["content"];
+
+        // Escape all strings for security and (" ' ") values
+        $menu_name = mysqli_real_escape_string($db, $menu_name);
+        $content = mysqli_real_escape_string($db, $content);
+
+        // Perform database query
+        $query = "UPDATE pages SET
+                  subject_id = {$subject_id},
+                  menu_name = '{$menu_name}',
+                  position = {$position},
+                  visible = {$visible},
+                  content = '{$content}'
+                  WHERE id = {$id}
+                  LIMIT 1";
+
+        $result = mysqli_query($db, $query); // collection of database rows
+
+        // Test if there was a query error
+        if($result && mysqli_affected_rows($db) >= 0) {
+          // Success
+          $_SESSION["message"] = "Page updated.";
+          redirect_to("manage_content.php?page={$current_page["id"]}");
+        }
+        else {
+          // Failure
+          $message = "Page update failed.";
+        }
+      }
+
+    } else {
+      // THIS IS PROBABLY A GET REQUEST
+    }
+  }
+
+  function delete_page() {
+
+    global $db;
+
+    $current_page = find_page_by_id($_GET["page"]);
+    if (!$current_page) { redirect_to("manage_content.php"); }
+
+    $id = $current_page["id"];
+    $query = "DELETE FROM pages WHERE id = {$id} LIMIT 1";
+
+    $result = mysqli_query($db, $query);
+
+    // TEST IF THERE WAS A QUERY ERROR
+    if($result && mysqli_affected_rows($db) == 1) {
+      // Success
+      $_SESSION["message"] = "Page deleted.";
+      redirect_to("manage_content.php");
+    }
+    else {
+      // Failure
+      $_SESSION["message"] = "Page deletion failed.";
+      redirect_to("manage_content.php?page={$id}");
+    }
+  }
+
 ?>

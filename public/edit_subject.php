@@ -16,17 +16,17 @@
 
   <div id="page">
 
-    <?php if (!empty($message)) { echo "<div class=\"message\">{$message}</div>"; } // ERROR MESSAGE (IF ANY) ?>
+    <?php if (!empty($message)) { echo "<div class=\"message\">" . htmlentities($message) . "</div>"; } // ERROR MESSAGE (IF ANY) ?>
     <?php echo form_errors($errors); // FORM ERRORS (IF ANY) ?>
 
-    <h2>Edit Subject <?php echo $current_subject["menu_name"]; ?></h2>
+    <h2>Edit Subject <?php echo htmlentities($current_subject["menu_name"]); ?></h2>
 
-    <form action="edit_subject.php?subject=<?php echo $current_subject["id"]; ?>" method="post">
+    <form action="edit_subject.php?subject=<?php echo urlencode($current_subject["id"]); ?>" method="post">
 
       <p>Menu Name:
         <input type="text"
                name="menu_name"
-               value="<?php echo $current_subject["menu_name"]; ?>">
+               value="<?php echo htmlentities($current_subject["menu_name"]); ?>">
       </p>
 
       <p>Position:
@@ -59,7 +59,7 @@
     <a href="manage_content.php">Cancel</a>
     &nbsp;
     &nbsp;
-    <a href="delete_subject.php?subject=<?php echo $current_subject["id"] ?>"
+    <a href="delete_subject.php?subject=<?php echo urlencode($current_subject["id"]) ?>"
       onclick="return confirm('Are you sure?')">Delete subject</a>
 
   </div>

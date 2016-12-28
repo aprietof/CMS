@@ -21,7 +21,7 @@
       $html .= "<p>Please fix the following errors</p>";
       $html .= "<ul>";
       foreach ($errors as $key => $error) {
-        $html .= "<li>{$error}</li>";
+        $html .= "<li>" . htmlentities($error) . "</li>";
       }
       $html .= "</ul>";
       $html .= "</div>";
@@ -70,7 +70,8 @@
 
           // output data from each row
           $output .= "<li class=" . selected_class($subject_array["id"], $subject) . ">";
-          $output .= "<a href=\"manage_content.php?subject=" . urlencode($subject["id"]) . "\">{$subject["menu_name"]}</a>";
+          $output .= "<a href=\"manage_content.php?subject=" . urlencode($subject["id"]);
+          $output .= "\">" . htmlentities($subject["menu_name"]) . "</a>";
 
           // PERFORM PAGES DB QUERY
           $pages_set = find_pages_for_subject($subject["id"]);
@@ -80,8 +81,9 @@
 
           while ($page = mysqli_fetch_assoc($pages_set)) { // increment the pointer
             // output data from each row
-            $output .= "<li class=". selected_class($page_array["id"], $page) .">";
-            $output .= "<a href=\"manage_content.php?page=" . urlencode($page["id"]) . "\">{$page["menu_name"]}</a></li>";
+            $output .= "<li class=". htmlentities(selected_class($page_array["id"], $page)) .">";
+            $output .= "<a href=\"manage_content.php?page=" . urlencode($page["id"]);
+            $output .= "\">" . htmlentities($page["menu_name"]) . "</a></li>";
           }
 
           mysqli_free_result($pages_set); // RELEASE PAGES RETURNED DB
@@ -130,6 +132,7 @@
 
   function create_subject() {
 
+    global $errors;
     global $db;
 
     // CHECK IF FORM WAS SUBMITED
@@ -184,6 +187,7 @@
 
   function update_subject($current_subject) {
 
+    global $errors;
     global $db;
 
     // CHECK IF FORM WAS SUBMITED
@@ -220,7 +224,7 @@
         $result = mysqli_query($db, $query); // collection of database rows
 
         // Test if there was a query error
-        if($result && mysqli_affected_rows($db) == 1) {
+        if($result && mysqli_affected_rows($db) >= 0) {
           // Success
           $_SESSION["message"] = "Subject updated.";
           redirect_to("manage_content.php?subject={$current_subject["id"]}");

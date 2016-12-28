@@ -1,29 +1,32 @@
 <?php require_once("../includes/session.php"); // START SESSION AND SESSION FUNCTIONS ?>
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
+<?php require_once("../includes/validation_functions.php"); // VALIDATION FUNCTIONS FILE ?>
 <?php find_selected_page(); // CHECK FOR PAGE CONTENT ?>
 <?php if (!$current_subject) {redirect_to("manage_content.php");} // REDIRECT IF SUBJECT NOT FOUND ?>
+<?php update_subject($current_subject); // UPDATE SUBJECT IN DATABASE ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
 
 <div id="main">
+
   <div id="navigation">
     <?php echo navigation($current_subject, $current_page); ?>
   </div>
 
   <div id="page">
 
-    <?php echo message(); // Session Message (if any) ?>
-    <?php echo form_errors(errors()); // Session errors (if any) ?>
+    <?php if (!empty($message)) { echo "<div class=\"message\">{$message}</div>"; } // ERROR MESSAGE (IF ANY) ?>
+    <?php echo form_errors($errors); // FORM ERRORS (IF ANY) ?>
 
     <h2>Edit Subject <?php echo $current_subject["menu_name"]; ?></h2>
 
-    <form action="edit_subject.php" method="post">
+    <form action="edit_subject.php?subject=<?php echo $current_subject["id"]; ?>" method="post">
 
       <p>Menu Name:
         <input type="text"
-                name="menu_name"
-                value="<?php echo $current_subject["menu_name"]; ?>">
+               name="menu_name"
+               value="<?php echo $current_subject["menu_name"]; ?>">
       </p>
 
       <p>Position:

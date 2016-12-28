@@ -154,4 +154,62 @@
     }
   }
 
+
+  #### CRUD FUNCTIONS ####
+
+  function update_subject($current_subject) {
+
+    global $db;
+    // CHECK IF FORM WAS SUBMITED
+
+    if (isset($_POST["submit"])) {
+
+      // Validations
+      $required_fields = array("menu_name", "position", "visible");
+      validate_precences($required_fields);
+
+      $fields_with_max_lengths = array("menu_name" => 30);
+      validate_max_lengths($fields_with_max_lengths);
+
+
+      if (empty($errors)) {
+
+        // PERFORM UPDATE
+        // Data to UPDATE
+        $id = $current_subject["id"];
+        $menu_name = $_POST["menu_name"];
+        $position = (int) $_POST["position"];
+        $visible = (int) $_POST["visible"];
+
+        // Escape all strings for security and (" ' ") values
+        $menu_name = mysqli_real_escape_string($db, $menu_name);
+
+        // Perform database query
+        $query = "UPDATE subjects SET
+                  menu_name = '{$menu_name}',
+                  position = {$position},
+                  visible = {$visible}
+                  WHERE id = {$id}
+                  LIMIT 1";
+
+        $result = mysqli_query($db, $query); // collection of database rows
+
+        // Test if there was a query error
+        if($result && mysqli_affected_rows($db) == 1) {
+          // Success
+          $_SESSION["message"] = "Subject updated.";
+          redirect_to("manage_content.php?subject={$current_subject["id"]}");
+        }
+        else {
+          // Failure
+          $message = "Subject update failed.";
+        }
+      }
+
+    } else {
+      // THIS IS PROBABLY A GET REQUEST
+    }
+  }
+
+
 ?>

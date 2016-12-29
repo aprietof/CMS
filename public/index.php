@@ -4,7 +4,7 @@
 
 <?php $layout_context = "public"; ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
-<?php find_selected_page(); ?>
+<?php find_selected_page(true); ?>
 
 <div id="main">
 
@@ -17,15 +17,9 @@
     <?php echo message(); // Session Message (if any) ?>
 
     <?php
-      if ($current_subject) {
-        echo "<h2>Manage Content</h2>";
-        echo "Menu Name: " . htmlentities($current_subject["menu_name"]) . "<br/>";
-
-
-      } elseif ($current_page) {
-        echo "<h2>Manage Page</h2>";
-        echo "Page Name: " . htmlentities($current_page["menu_name"]) . "<br/>";
-        echo "<div class=\"view-content\">";
+      if ($current_page) {
+        echo "<h2>" . htmlentities($current_page["menu_name"]) . "</h2>";
+        echo "<div>";
         echo htmlentities($current_page["content"]);
         echo "</div>";
 

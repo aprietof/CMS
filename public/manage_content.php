@@ -1,6 +1,7 @@
 <?php require_once("../includes/session.php"); // START SESSION AND SESSION FUNCTIONS ?>
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
+<?php $layout_content = "admin"; // ADMIN LAYOUT CONTEXT ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 <?php find_selected_page(); // CHECK FOR PAGE CONTENT ?>
 
@@ -61,7 +62,7 @@
         echo "<br/>";
         echo "<a href=\"edit_page.php?page={$current_page["id"]}\" >Edit Page</a>";
       } else {
-        echo "<br />Please select a subject or a page";
+        echo "<br />Please select a subject or a page <br/>";
       }
     ?>
 

@@ -5,6 +5,7 @@
 <?php find_selected_page(); // CHECK FOR PAGE CONTENT ?>
 <?php if (!$current_page) {redirect_to("manage_content.php");} // REDIRECT IF SUBJECT NOT FOUND ?>
 <?php update_page($current_page); // UPDATE SUBJECT IN DATABASE ?>
+<?php $layout_content = "admin"; // ADMIN LAYOUT CONTEXT ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
 <div id="main">

@@ -1,3 +1,4 @@
+<?php $layout_content = "admin"; ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
 <div id="main">

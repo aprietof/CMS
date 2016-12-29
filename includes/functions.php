@@ -31,12 +31,12 @@
 
   // RETURN SUBJECTS COUNT
   function subjects_count() {
-    return mysqli_num_rows(find_all_subjects());
+    return mysqli_num_rows(find_all_subjects(false));
   }
 
   // RETURN PAGES COUNT
   function pages_count($subject_id) {
-    return mysqli_num_rows(find_pages_for_subject($subject_id));
+    return mysqli_num_rows(find_pages_for_subject($subject_id, false));
   }
 
   // DEFINE SELECTED CLASS
@@ -60,13 +60,13 @@
     }
   }
 
-  // RENDER NAVIGATION BAR (takes two arguments)
+  // RENDER ADMIN NAVIGATION (takes two arguments)
   # the currently selected subject array
   # the currently selected page array
   function navigation($subject_array, $page_array) {
 
     // PERFORM SUBJECTS DB QUERY
-    $subjects_set = find_all_subjects();
+    $subjects_set = find_all_subjects(false);
 
     $output = "<ul class=\"subjects\">";
 
@@ -79,7 +79,7 @@
           $output .= "\">" . htmlentities($subject["menu_name"]) . "</a>";
 
           // PERFORM PAGES DB QUERY
-          $pages_set = find_pages_for_subject($subject["id"]);
+          $pages_set = find_pages_for_subject($subject["id"], false);
           confirm_query($pages_set);
 
           $output .= "<ul class=\"pages\">";
@@ -102,18 +102,62 @@
     return $output;
   }
 
+  // RENDER PUBLIC NAVIGATION (takes two arguments)
+  function public_navigation($subject_array, $page_array) {
+
+    // PERFORM SUBJECTS DB QUERY
+    $subjects_set = find_all_subjects();
+
+    $output = "<ul class=\"subjects\">";
+
+        // USE RETURNED DATA (IF ANY)
+        while ($subject = mysqli_fetch_assoc($subjects_set)) { // increment the pointer
+
+          // output data from each row
+          $output .= "<li class=" . selected_class($subject_array["id"], $subject) . ">";
+          $output .= "<a href=\"index.php?subject=" . urlencode($subject["id"]);
+          $output .= "\">" . htmlentities($subject["menu_name"]) . "</a>";
+
+          if ($subject_array["id"] == $subject["id"] || $page_array["subject_id"] == $subject["id"]) { // Accordion effect
+            // PERFORM PAGES DB QUERY
+            $pages_set = find_pages_for_subject($subject["id"]);
+            confirm_query($pages_set);
+
+            $output .= "<ul class=\"pages\">";
+
+            while ($page = mysqli_fetch_assoc($pages_set)) { // increment the pointer
+              // output data from each row
+              $output .= "<li class=". htmlentities(selected_class($page_array["id"], $page)) .">";
+              $output .= "<a href=\"index.php?page=" . urlencode($page["id"]);
+              $output .= "\">" . htmlentities($page["menu_name"]) . "</a></li>";
+            }
+            $output .= "</ul>";
+            mysqli_free_result($pages_set); // RELEASE PAGES RETURNED DB
+          }
+          $output .= "</li>"; // END OF SUBJECT <li>
+        }
+
+        mysqli_free_result($subjects_set); // RELEASE RETURNED DB
+    $output .= "</ul>";
+    return $output;
+  }
+
 
   #----------- CRUD FUNCTIONS ----------- #
 
   // * SUBJECTS *
 
-  // PERFORM SUBJECTS DATABASE QUERY
-  function find_all_subjects() {
+  // PERFORM SUBJECTS DATABASE QUERY (takes context argument T/F)
+  function find_all_subjects($public=true) {
 
     global $db; #=> GLOBAL DATABASE
 
     // SUBJECTS QUERY
-    $query = "SELECT * FROM subjects ORDER BY position ASC";
+    $query = "SELECT * FROM subjects ";
+    if ($public) {
+      $query .= "WHERE visible = 1 ";
+    }
+    $query .= "ORDER BY position ASC";
     $subjects_set = mysqli_query($db, $query); #=> collection of database rows
     confirm_query($subjects_set);
     return $subjects_set;
@@ -122,6 +166,7 @@
   // PERFORM SUBJECT DATABASE QUERY BY ID
   function find_subject_by_id($subject_id) {
 
+    global $public;
     global $db; #=> GLOBAL DATABASE
     $safe_subject_id = mysqli_real_escape_string($db, $subject_id); #=> prevents sql injection
 
@@ -252,7 +297,7 @@
     $current_subject = find_subject_by_id($_GET["subject"]);
     if (!$current_subject) { redirect_to("manage_content.php"); }
 
-    $page_set = find_pages_for_subject($current_subject["id"]);
+    $page_set = find_pages_for_subject($current_subject["id"], false);
 
     // CHECK IF SUBJECT HAS PAGES AND STOP DELETION IF TRUE
     if (mysqli_num_rows($page_set) > 0) {
@@ -281,15 +326,18 @@
   // * PAGES *
 
   // PERFORM PAGES DATABASE QUERY
-  function find_pages_for_subject($subject_id) {
+  // Takes two args subject id and context(T/F)
+  function find_pages_for_subject($subject_id, $public=true) {
 
     global $db; #=> GLOBAL DATABASE
     $safe_subject_id = mysqli_real_escape_string($db, $subject_id);
 
-    $query = "SELECT * FROM pages
-              WHERE visible = 1
-              AND subject_id = {$safe_subject_id}
-              ORDER BY position ASC";
+    $query = "SELECT * FROM pages ";
+    $query .= "WHERE subject_id = {$safe_subject_id} ";
+    if ($public) {
+      $query .= "AND visible = 1 ";
+    }
+    $query .= "ORDER BY position ASC";
 
     $pages_set = mysqli_query($db, $query); #=> collection of database rows
     return $pages_set;
@@ -354,7 +402,7 @@
       if($result) {
         // Success
         $_SESSION["message"] = "Page created.";
-        redirect_to("manage_content.php");
+        redirect_to("manage_content?subject={$subject_id}");
       }
       else {
         // Failure

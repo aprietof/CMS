@@ -16,8 +16,7 @@
   </div>
 
   <div id="page">
-
-
+    
     <?php echo message(); // Session Message (if any) ?>
 
     <?php

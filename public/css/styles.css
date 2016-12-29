@@ -75,3 +75,12 @@ div.message {
 	margin: 1em 0; padding: 1em;
 }
 .error ul { padding-left: 2em; }
+
+th.username {
+  text-align: left;
+  width: 200px;
+}
+
+th.actions {
+  text-align: left;
+}

@@ -180,7 +180,6 @@
   // PERFORM SUBJECT DATABASE QUERY BY ID
   function find_subject_by_id($subject_id, $public=true) {
 
-    global $public;
     global $db; #=> GLOBAL DATABASE
     $safe_subject_id = mysqli_real_escape_string($db, $subject_id); #=> prevents sql injection
 
@@ -519,6 +518,88 @@
       // Failure
       $_SESSION["message"] = "Page deletion failed.";
       redirect_to("manage_content.php?page={$id}");
+    }
+  }
+
+  // * ADMINS *
+
+  function find_all_admins() {
+
+    global $db;
+
+    // ADMINS QUERY
+    $query = "SELECT * FROM admins ORDER BY username ASC";
+    $admin_set = mysqli_query($db, $query); #=> collection of database rows
+    confirm_query($admin_set);
+    return $admin_set;
+  }
+
+  function find_admin_by_id($admin_id) {
+
+    global $db;
+
+    $safe_admin_id = mysqli_real_escape_string($db, $admin_id); #=> prevents sql injection
+
+    $query = "SELECT * FROM admins WHERE id = {$safe_admin_id} LIMIT 1";
+    $admin_set = mysqli_query($db, $query); #=> database row
+    confirm_query($admin_set);
+    if ($admin = mysqli_fetch_assoc($admin_set)) {
+      return $admin;
+    } else {
+      return NULL;
+    }
+  }
+
+  function create_admin() {
+
+    global $errors;
+    global $db;
+
+    // CHECK IF FORM WAS SUBMITED
+    if (isset($_POST["submit"])) {
+
+      // Data to INSERT
+      $username = $_POST["username"];
+      $password = $_POST["password"];
+
+      // Escape all strings for security and (" ' ") values
+      $username = mysqli_real_escape_string($db, $username);
+      $hashed_password = mysqli_real_escape_string($db, $password);
+
+      // Validations
+      $required_fields = array("username", "password");
+      validate_precences($required_fields);
+
+      $fields_with_max_lengths = array("username" => 30);
+      validate_max_lengths($fields_with_max_lengths);
+
+      // Redirect if validation errors
+      if (!empty($errors)) {
+
+        // Add errors to session
+        $_SESSION["errors"] = $errors;
+        redirect_to("new_page.php");
+      }
+
+      // Perform database query
+      $query = "INSERT INTO admins (username, hashed_password)
+                VALUES ('{$username}', '{$hashed_password}')";
+      $result = mysqli_query($db, $query); // collection of database rows
+
+      // Test if there was a query error
+      if($result) {
+        // Success
+        $_SESSION["message"] = "Admin created.";
+        redirect_to("manage_admins.php");
+      }
+      else {
+        // Failure
+        $_SESSION["message"] = "Admin creation failed.";
+        redirect_to("new_admin.php");
+      }
+    } else {
+      // THIS IS PROBABLY A GET REQUEST
+      redirect_to("new_admin.php");
     }
   }
 

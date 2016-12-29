@@ -65,12 +65,12 @@
     $current_page = NULL;
 
     if (isset($_GET["subject"])) {
-      $current_subject = find_subject_by_id($_GET["subject"]);
-      if ($public) {
+      $current_subject = find_subject_by_id($_GET["subject"], $public);
+      if ($current_subject && $public) {
         $current_page = find_default_page_for_subject($_GET["subject"]);
       }
     } elseif (isset($_GET["page"])) {
-      $current_page = find_page_by_id($_GET["page"]);
+      $current_page = find_page_by_id($_GET["page"], $public);
     }
   }
 
@@ -178,13 +178,17 @@
   }
 
   // PERFORM SUBJECT DATABASE QUERY BY ID
-  function find_subject_by_id($subject_id) {
+  function find_subject_by_id($subject_id, $public=true) {
 
     global $public;
     global $db; #=> GLOBAL DATABASE
     $safe_subject_id = mysqli_real_escape_string($db, $subject_id); #=> prevents sql injection
 
-    $query = "SELECT * FROM subjects WHERE id = {$safe_subject_id} LIMIT 1";
+    $query = "SELECT * FROM subjects WHERE id = {$safe_subject_id} ";
+    if ($public) {
+      $query .= "AND visible = 1 ";
+    }
+    $query .= "LIMIT 1";
     $subject_set = mysqli_query($db, $query); #=> database row
     confirm_query($subject_set);
     if ($subject = mysqli_fetch_assoc($subject_set)) {
@@ -308,7 +312,7 @@
 
     global $db;
 
-    $current_subject = find_subject_by_id($_GET["subject"]);
+    $current_subject = find_subject_by_id($_GET["subject"], false);
     if (!$current_subject) { redirect_to("manage_content.php"); }
 
     $page_set = find_pages_for_subject($current_subject["id"], false);
@@ -358,12 +362,16 @@
   }
 
   // PERFORM PAGE DATABASE QUERY BY ID
-  function find_page_by_id($page_id) {
+  function find_page_by_id($page_id, $public=true) {
 
     global $db; #=> GLOBAL DATABASE
     $safe_page_id = mysqli_real_escape_string($db, $page_id); #=> prevents sql injection
 
-    $query = "SELECT * FROM pages WHERE id = {$safe_page_id} LIMIT 1";
+    $query = "SELECT * FROM pages WHERE id = {$safe_page_id} ";
+    if ($public) {
+      $query .= "AND visible = 1 ";
+    }
+    $query .= "LIMIT 1";
     $page_set = mysqli_query($db, $query); #=> database row
     confirm_query($page_set);
     if ($page = mysqli_fetch_assoc($page_set)) {
@@ -493,7 +501,7 @@
 
     global $db;
 
-    $current_page = find_page_by_id($_GET["page"]);
+    $current_page = find_page_by_id($_GET["page"], false);
     if (!$current_page) { redirect_to("manage_content.php"); }
 
     $id = $current_page["id"];

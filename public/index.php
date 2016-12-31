@@ -20,7 +20,7 @@
       if ($current_page) {
         echo "<h2>" . htmlentities($current_page["menu_name"]) . "</h2>";
         echo "<div>";
-        echo nl2br(htmlentities($current_page["content"]));
+        echo $current_page["content"];
         echo "</div>";
 
       } else {

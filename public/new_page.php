@@ -44,7 +44,7 @@
       </p>
 
       <p>Content:</p>
-      <textarea name="content" rows="14" cols="100"></textarea><br />
+      <textarea id="mytextarea" name="content" rows="14" cols="100"></textarea><br />
 
       <br />
       <input type="submit" name="submit" value="Create Page">

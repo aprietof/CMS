@@ -57,7 +57,7 @@
         echo $current_page["visible"] == 1 ? "Yes <br/>" : "No <br/>";
         echo "Content: ";
         echo "<div class=\"view-content\">";
-        echo htmlentities($current_page["content"]);
+        echo $current_page["content"];
         echo "</div>";
         echo "<br/>";
         echo "<a href=\"edit_page.php?page={$current_page["id"]}\" >Edit Page</a>";

@@ -22,51 +22,52 @@
 
     <h2>Edit Page <?php echo htmlentities($current_page["menu_name"]); ?></h2>
 
-    <form action="edit_page.php?page=<?php echo urlencode($current_page["id"]); ?>" method="post">
+    <div class="edit-page">
+      <form action="edit_page.php?page=<?php echo urlencode($current_page["id"]); ?>" method="post">
 
-      <p>Menu Name:
-        <input type="text"
-               name="menu_name"
-               value="<?php echo htmlentities($current_page["menu_name"]); ?>">
-      </p>
+        <p>Menu Name:
+          <input type="text"
+                 name="menu_name"
+                 value="<?php echo htmlentities($current_page["menu_name"]); ?>">
+        </p>
 
-      <p>Position:
-        <select name="position">
-          <?php
-            $pages_count = pages_count($current_page["subject_id"]);
-            for ($count=1; $count <= $pages_count; $count++) {
-              echo "<option value=\"{$count}\"";
-              if ($current_page["position"] == $count) {
-                echo " selected";
+        <p>Position:
+          <select name="position">
+            <?php
+              $pages_count = pages_count($current_page["subject_id"]);
+              for ($count=1; $count <= $pages_count; $count++) {
+                echo "<option value=\"{$count}\"";
+                if ($current_page["position"] == $count) {
+                  echo " selected";
+                }
+                echo ">{$count}</option>";
               }
-              echo ">{$count}</option>";
-            }
-          ?>
-        </select>
-      </p>
+            ?>
+          </select>
+        </p>
 
-      <p>Visible:
-        <input type="radio" name="visible" value="0"
-        <?php if ($current_page["visible"] == 0) { echo " checked";} ?>>No
-        &nbsp;
-        <input type="radio" name="visible" value="1"
-        <?php if ($current_page["visible"] == 1) { echo " checked";} ?>>Yes
-      </p>
+        <p>Visible:
+          <input type="radio" name="visible" value="0"
+          <?php if ($current_page["visible"] == 0) { echo " checked";} ?>>No
+          &nbsp;
+          <input type="radio" name="visible" value="1"
+          <?php if ($current_page["visible"] == 1) { echo " checked";} ?>>Yes
+        </p>
 
-      <p>Content:</p>
-      <textarea name="content" rows="14" cols="100"><?php echo $current_page["content"]; ?>
-      </textarea><br />
+        <p>Content:</p>
+        <textarea id="mytextarea" name="content" rows="14" cols="100"><?php echo $current_page["content"]; ?>
+        </textarea><br />
 
+        <input type="submit" name="submit" value="Update Page">
+
+      </form>
       <br />
-      <input type="submit" name="submit" value="Update Page">
-
-    </form>
-    <br />
-    <a href="manage_content.php?page=<?php echo urlencode($current_page["id"]) ?>">Cancel</a>
-    &nbsp;
-    &nbsp;
-    <a href="delete_page.php?page=<?php echo urlencode($current_page["id"]) ?>"
-      onclick="return confirm('Are you sure?')">Delete Page</a>
+      <a href="manage_content.php?page=<?php echo urlencode($current_page["id"]) ?>">Cancel</a>
+      &nbsp;
+      &nbsp;
+      <a href="delete_page.php?page=<?php echo urlencode($current_page["id"]) ?>"
+        onclick="return confirm('Are you sure?')">Delete Page</a>
+    </div> <!-- end edit page -->
 
   </div>
 </div>

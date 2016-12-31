@@ -836,7 +836,7 @@
 
   function logout() {
     $_SESSION = array();
-    $_SESSION["message"] = "Logout succsesfuly!";
+    $_SESSION["message"] = "Logout succsesfuly";
     redirect_to("login.php");
   }
 

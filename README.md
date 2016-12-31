@@ -1,6 +1,6 @@
 #CMS
 
-Content management system (CMS) application that allows publishing, editing and modifying content, organizing, deleting as well as maintenance from a central interface. Built with PHP and MySQL.
+Content management system (CMS) application that allows publishing, editing and modifying content, organizing, deleting as well as maintenance from a central interface. Built with PHP v5.5 and MySQL v5.7.
 
 ##Directory structure
 
@@ -116,16 +116,16 @@ mysql> CREATE TABLE pages (
 Query OK, 0 rows affected (0.02 sec)
 
 mysql> SHOW COLUMNS FROM pages;
-+------------+------------+------+-----+---------+----------------+
-| Field      | Type       | Null | Key | Default | Extra          |
-+------------+------------+------+-----+---------+----------------+
-| id         | int(11)    | NO   | PRI | NULL    | auto_increment |
-| subject_id | int(11)    | NO   | MUL | NULL    |                |
-| menu_name  | varchar(3) | NO   |     | NULL    |                |
-| position   | int(3)     | NO   |     | NULL    |                |
-| visible    | tinyint(1) | NO   |     | NULL    |                |
-| content    | text       | YES  |     | NULL    |                |
-+------------+------------+------+-----+---------+----------------+
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id         | int(11)     | NO   | PRI | NULL    | auto_increment |
+| subject_id | int(11)     | NO   | MUL | NULL    |                |
+| menu_name  | varchar(30) | NO   |     | NULL    |                |
+| position   | int(3)      | NO   |     | NULL    |                |
+| visible    | tinyint(1)  | NO   |     | NULL    |                |
+| content    | text        | YES  |     | NULL    |                |
++------------+------------+-------+-----+---------+----------------+
 6 rows in set (0.00 sec)
 ```
 

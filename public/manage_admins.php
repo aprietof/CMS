@@ -1,6 +1,7 @@
 <?php require_once("../includes/session.php"); // START SESSION AND SESSION FUNCTIONS ?>
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
+<?php redirect_if_not_logged_in(); // REDIRECT TO LOGIN PAGE IF NOT LOGGED IN ?>
 <?php $admin_set = find_all_admins(); // FIN ALL ADMINS IN DATABASE ?>
 <?php $layout_content = "admin"; // ADMIN LAYOUT CONTEXT ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
@@ -8,7 +9,8 @@
 <div id="main">
 
   <div id="navigation">
-    &nbsp;
+    <br />
+    <a href="admin.php">&laquo; Main Menu</a><br />
   </div>
 
   <div id="page">

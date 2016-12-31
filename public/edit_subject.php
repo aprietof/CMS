@@ -2,6 +2,7 @@
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
 <?php require_once("../includes/validation_functions.php"); // VALIDATION FUNCTIONS FILE ?>
+<?php redirect_if_not_logged_in(); // REDIRECT TO LOGIN PAGE IF NOT LOGGED IN ?>
 <?php find_selected_page(); // CHECK FOR PAGE CONTENT ?>
 <?php if (!$current_subject) {redirect_to("manage_content.php");} // REDIRECT IF SUBJECT NOT FOUND ?>
 <?php update_subject($current_subject); // UPDATE SUBJECT IN DATABASE ?>

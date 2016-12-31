@@ -789,7 +789,7 @@
       if($found_admin) {
         // Success
         $_SESSION["username"] = $found_admin["username"];
-        $_SESSION["id"] = $found_admin["id"];
+        $_SESSION["admin_id"] = $found_admin["id"];
         redirect_to("admin.php");
       }
       else {
@@ -824,7 +824,7 @@
 
   // RETURNS IF USER IS LOGGED IN (T/F)
   function logged_in() {
-    return isset($_SESSION["id"]);
+    return isset($_SESSION["admin_id"]);
   }
 
   // REDIRECT TO LOGIN IF USER IS NOT LOGGED IN
@@ -832,6 +832,12 @@
     if(!logged_in()) {
       redirect_to("login.php");
     }
+  }
+
+  function logout() {
+    $_SESSION = array();
+    $_SESSION["message"] = "Logout succsesfuly!";
+    redirect_to("login.php");
   }
 
 ?>

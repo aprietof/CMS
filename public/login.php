@@ -2,7 +2,7 @@
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
 <?php require_once("../includes/validation_functions.php"); // VALIDATION FUNCTIONS FILE ?>
-<?php login(); // CREATE ADMIN IN DATABASE ?>
+<?php login(); ?>
 <?php $layout_content = "admin"; // ADMIN LAYOUT CONTEXT ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
@@ -24,7 +24,7 @@
       <p>
         Username: <br />
         <input type="text" name="username"
-        value=<?php echo htmlentities($username); // global $username ?>>
+        value=<?php echo htmlentities($username); // global $username from function ?>>
       </p>
 
       <p>

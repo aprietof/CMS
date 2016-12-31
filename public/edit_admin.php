@@ -2,6 +2,7 @@
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
 <?php require_once("../includes/validation_functions.php"); // VALIDATION FUNCTIONS FILE ?>
+<?php redirect_if_not_logged_in(); // REDIRECT TO LOGIN PAGE IF NOT LOGGED IN ?>
 <?php $current_admin = find_admin_by_id($_GET["id"]); // CHECK FOR ADMIN ID ?>
 <?php if (!$current_admin) {redirect_to("manage_admins.php");} // REDIRECT IF SUBJECT NOT FOUND ?>
 <?php update_admin($current_admin); // UPDATE ADMIN IN DATABASE ?>

@@ -1,7 +1,7 @@
 <?php require_once("../includes/session.php"); // START SESSION AND SESSION FUNCTIONS ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
 <?php $layout_content = "admin"; ?>
-<?php redirect_if_not_logged_in(); ?>
+<?php redirect_if_not_logged_in(); // REDIRECT TO LOGIN PAGE IF NOT LOGGED IN ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
 <div id="main">

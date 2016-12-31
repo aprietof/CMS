@@ -1,6 +1,7 @@
 <?php require_once("../includes/session.php"); // START SESSION AND SESSION FUNCTIONS ?>
 <?php require_once("../includes/db_connection.php"); // CREATE DB CONNECTION ?>
 <?php require_once("../includes/functions.php"); // FUNCTIONS FILE ?>
+<?php redirect_if_not_logged_in(); // REDIRECT TO LOGIN PAGE IF NOT LOGGED IN ?>
 <?php $layout_content = "admin"; // ADMIN LAYOUT CONTEXT ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 <?php find_selected_page(); // CHECK FOR PAGE CONTENT ?>
@@ -16,7 +17,7 @@
   </div>
 
   <div id="page">
-    
+
     <?php echo message(); // Session Message (if any) ?>
 
     <?php

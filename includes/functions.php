@@ -159,9 +159,11 @@
 
   #----------- CRUD FUNCTIONS ----------- #
 
+
   // * SUBJECTS *
 
-  // PERFORM SUBJECTS DATABASE QUERY (takes context argument T/F)
+  // PERFORM SUBJECTS DATABASE QUERY
+  // (takes context argument T/F)
   function find_all_subjects($public=true) {
 
     global $db; #=> GLOBAL DATABASE
@@ -339,6 +341,7 @@
       redirect_to("manage_content.php?subject={$id}");
     }
   }
+
 
   // * PAGES *
 
@@ -521,6 +524,7 @@
     }
   }
 
+
   // * ADMINS *
 
   function find_all_admins() {
@@ -550,6 +554,22 @@
     }
   }
 
+  function find_admin_by_username($username) {
+
+    global $db;
+
+    $safe_admin_id = mysqli_real_escape_string($db, $username); #=> prevents sql injection
+
+    $query = "SELECT * FROM admins WHERE username = '{$safe_admin_id}' LIMIT 1";
+    $admin_set = mysqli_query($db, $query); #=> database row
+    confirm_query($admin_set);
+    if ($admin = mysqli_fetch_assoc($admin_set)) {
+      return $admin;
+    } else {
+      return NULL;
+    }
+  }
+
   function create_admin() {
 
     global $errors;
@@ -564,7 +584,7 @@
 
       // Escape all strings for security and (" ' ") values
       $username = mysqli_real_escape_string($db, $username);
-      $hashed_password = password_encrypt($db, $password);
+      $hashed_password = password_encrypt($password);
 
       // Validations
       $required_fields = array("username", "password");
@@ -682,6 +702,7 @@
     }
   }
 
+
   // * PASSWORD ENCRYPTION *
 
   // ENCRYPT PASSWORD USING BLOWFISH ALGORITHM AND SALT
@@ -727,6 +748,89 @@
       return true;
     } else {
       return false;
+    }
+  }
+
+  function login() {
+
+    global $username;
+    global $errors;
+    global $db;
+
+    $username = "";
+
+    // CHECK IF FORM WAS SUBMITED
+    if (isset($_POST["submit"])) {
+
+      // Data to INSERT
+      $username = $_POST["username"];
+      $password = $_POST["password"];
+
+      // Escape all strings for security and (" ' ") values
+      $username = mysqli_real_escape_string($db, $username);
+      $hashed_password = password_encrypt($password);
+
+      // Validations
+      $required_fields = array("username", "password");
+      validate_precences($required_fields);
+
+      // Redirect if validation errors
+      if (!empty($errors)) {
+
+        // Add errors to session
+        $_SESSION["errors"] = $errors;
+        redirect_to("login.php");
+      }
+
+      // Perform database query (look for admin in DB)
+      $found_admin = attepmt_login($username, $password);
+
+      // Test if there was a query error
+      if($found_admin) {
+        // Success
+        $_SESSION["username"] = $found_admin["username"];
+        $_SESSION["id"] = $found_admin["id"];
+        redirect_to("admin.php");
+      }
+      else {
+        // Failure
+        $_SESSION["message"] = "Usernmae/password not found.";
+        redirect_to("login.php");
+      }
+    } else {
+      // THIS IS PROBABLY A GET REQUEST
+    }
+  }
+
+  function attepmt_login($username, $password) {
+
+    // Find admin
+    $admin = find_admin_by_username($username);
+
+    if ($admin) {
+      // look for password
+      // if password matches return admin
+      if (password_check($password, $admin["hashed_password"])) {
+        return $admin;
+      } else {
+        // Password does not match
+        return false;
+      }
+    } else {
+      // admin not found
+      return false;
+    }
+  }
+
+  // RETURNS IF USER IS LOGGED IN (T/F)
+  function logged_in() {
+    return isset($_SESSION["id"]);
+  }
+
+  // REDIRECT TO LOGIN IF USER IS NOT LOGGED IN
+  function redirect_if_not_logged_in() {
+    if(!logged_in()) {
+      redirect_to("login.php");
     }
   }
 

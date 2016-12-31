@@ -32,7 +32,7 @@
       <?php } ?>
     </table>
     <br />
-    + <a href="new_admin.php">Add new admin</a>
+    + <a href="new_admin.php">Add new admin</a> &nbsp; <a href="manage_content.php">Cancel</a>
 
   </div>
 </div>

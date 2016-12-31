@@ -564,7 +564,7 @@
 
       // Escape all strings for security and (" ' ") values
       $username = mysqli_real_escape_string($db, $username);
-      $hashed_password = mysqli_real_escape_string($db, $password);
+      $hashed_password = password_encrypt($db, $password);
 
       // Validations
       $required_fields = array("username", "password");
@@ -578,7 +578,7 @@
 
         // Add errors to session
         $_SESSION["errors"] = $errors;
-        redirect_to("new_page.php");
+        redirect_to("new_admin.php");
       }
 
       // Perform database query
@@ -600,6 +600,133 @@
     } else {
       // THIS IS PROBABLY A GET REQUEST
       redirect_to("new_admin.php");
+    }
+  }
+
+  function update_admin($current_admin) {
+
+    global $errors;
+    global $db;
+
+    // CHECK IF FORM WAS SUBMITED
+    if (isset($_POST["submit"])) {
+
+      // Validations
+      $required_fields = array("username", "password");
+      validate_precences($required_fields);
+
+      $fields_with_max_lengths = array("username" => 30);
+      validate_max_lengths($fields_with_max_lengths);
+
+
+      if (empty($errors)) {
+
+        // PERFORM UPDATE
+        // Data to UPDATE
+        $id = $current_admin["id"];
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+
+        // Escape all strings for security and (" ' ") values
+        $username = mysqli_real_escape_string($db, $username);
+        $hashed_password = password_encrypt($password);
+
+        // Perform database query
+        $query = "UPDATE admins SET
+                  username = '{$username}',
+                  hashed_password = '{$hashed_password}'
+                  WHERE id = {$id}
+                  LIMIT 1";
+
+        $result = mysqli_query($db, $query); // collection of database rows
+
+        // Test if there was a query error
+        if($result && mysqli_affected_rows($db) >= 0) {
+          // Success
+          $_SESSION["message"] = "Admin updated.";
+          redirect_to("manage_admins.php");
+        }
+        else {
+          // Failure
+          $message = "Admin update failed.";
+        }
+      }
+
+    } else {
+      // THIS IS PROBABLY A GET REQUEST
+    }
+  }
+
+  function delete_admin($admin_id) {
+
+    global $db;
+
+    $current_admin = find_admin_by_id($_GET["id"]);
+    if (!$current_admin) { redirect_to("manage_admins.php"); }
+
+    $id = $current_admin["id"];
+    $query = "DELETE FROM admins WHERE id = {$id} LIMIT 1";
+
+    $result = mysqli_query($db, $query);
+
+    // TEST IF THERE WAS A QUERY ERROR
+    if($result && mysqli_affected_rows($db) == 1) {
+      // Success
+      $_SESSION["message"] = "admin deleted.";
+      redirect_to("manage_admins.php");
+    }
+    else {
+      // Failure
+      $_SESSION["message"] = "admin deletion failed.";
+      redirect_to("manage_admins.php");
+    }
+  }
+
+  // * PASSWORD ENCRYPTION *
+
+  // ENCRYPT PASSWORD USING BLOWFISH ALGORITHM AND SALT
+  function password_encrypt($password) {
+
+    // Tells PHP to use Blowfish algorithm
+    // with a "cost" of 10
+    $hash_format = "$2y$10$";
+
+    // Blowfish salts should be 22 characters or more
+    $salt_length = 22;
+
+    $salt = generate_salt($salt_length);
+    $format_nad_salt = $hash_format . $salt;
+    $hash = crypt($password, $format_nad_salt);
+    return $hash;
+  }
+
+  function generate_salt($length) {
+
+    // Not 100% unique not 100% random but good enough for salt
+    // MD5 returns 32 characters
+    $unique_random_string = md5(uniqid(mt_rand(), true));
+
+    // Valid characters for salt are [a-zA-Z0-9./]
+    $base64_string = base64_encode($unique_random_string);
+
+    // but not '+' which is valid in base 64 encoding
+    $modified_base64_string = str_replace("+", ".", $base64_string);
+
+    // Truncate string to the correct length
+    $salt = substr($modified_base64_string, 0, $length);
+
+    return $salt;
+  }
+
+  function password_check($password, $existing_hash) {
+
+    // Existing hash contains format and salt at start
+    $hash = crypt($password, $existing_hash);
+
+    if ($hash === $existing_hash ) {
+      return true;
+    } else {
+      return false;
     }
   }
 

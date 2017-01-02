@@ -3,7 +3,7 @@
 - Database creation
 - Folders Structure
 - admin.php basic page
-- stylesheets
+- initial stylesheets
 - creating includes (header, footer, functions)
 - connect to database
 - add close database into footer include
@@ -30,7 +30,6 @@
 - protecting page visibility
 - Admin CRUD
 - encrypting password (blowfish algorithm => included in PHP 5.5 and after => slow)
-crypt($password, $salt); => only supports 6 algorithms
 - create login system
 - checking for user authorization
 - logout added

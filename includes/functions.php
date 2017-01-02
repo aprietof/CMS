@@ -6,12 +6,14 @@
     exit;
   }
 
+
   // TEST IF QUERY ERROR
   function confirm_query ($result_set) {
     if(!$result_set) {
       die("Database query failed.");
     }
   }
+
 
   // DISPLAY FORM ERRORS
   function form_errors($errors) {
@@ -31,20 +33,24 @@
     return $html;
   }
 
+
   // RETURN SUBJECTS COUNT
   function subjects_count() {
     return mysqli_num_rows(find_all_subjects(false));
   }
+
 
   // RETURN PAGES COUNT
   function pages_count($subject_id) {
     return mysqli_num_rows(find_pages_for_subject($subject_id, false));
   }
 
+
   // DEFINE SELECTED CLASS
   function selected_class($selected_page_id, $page){
     return $class = (isset($selected_page_id) && isset($page) && $selected_page_id == $page["id"]) ? "selected" : "";
   }
+
 
   // FIND DEFAULT PAGE FOR SUBJECT (First Page)
   function find_default_page_for_subject($subject_id) {
@@ -56,6 +62,7 @@
       return NULL;
     }
   }
+
 
   // CHECK FOR PAGE CONTENT (Takes T/F for public visibility)
   function find_selected_page($public=false) {
@@ -75,6 +82,7 @@
       $current_page = find_page_by_id($_GET["page"], $public);
     }
   }
+
 
   // RENDER ADMIN NAVIGATION (takes two arguments)
   # the currently selected subject array
@@ -117,6 +125,8 @@
     $output .= "</ul>";
     return $output;
   }
+
+
 
   // RENDER PUBLIC NAVIGATION (takes two arguments)
   function public_navigation($subject_array, $page_array) {
@@ -181,6 +191,7 @@
     return $subjects_set;
   }
 
+
   // PERFORM SUBJECT DATABASE QUERY BY ID
   function find_subject_by_id($subject_id, $public=true) {
 
@@ -201,6 +212,8 @@
     }
   }
 
+
+  // CREATE SUBJECT
   function create_subject() {
 
     global $errors;
@@ -232,7 +245,6 @@
         redirect_to("new_subject.php");
       }
 
-
       // Perform database query
       $query = "INSERT INTO subjects (menu_name, position, visible)
                 VALUES ('{$menu_name}', {$position}, {$visible})";
@@ -256,6 +268,8 @@
     }
   }
 
+
+  // UPDATE SUBJECT
   function update_subject($current_subject) {
 
     global $errors;
@@ -311,6 +325,8 @@
     }
   }
 
+
+  // DELETE SUBJECT
   function delete_subject() {
 
     global $db;
@@ -346,6 +362,7 @@
 
 
   // * PAGES *
+
 
   // PERFORM PAGES DATABASE QUERY
   // Takes two args subject id and context(T/F)
@@ -385,6 +402,8 @@
     }
   }
 
+
+  // CREATE PAGE
   function create_page() {
 
     global $errors;
@@ -441,6 +460,8 @@
     }
   }
 
+
+  // UPDATE PAGE
   function update_page($current_page) {
 
     global $errors;
@@ -501,6 +522,8 @@
     }
   }
 
+
+  // DELETE PAGE
   function delete_page() {
 
     global $db;
@@ -529,6 +552,8 @@
 
   // * ADMINS *
 
+
+  // FIND ALL ADMINS
   function find_all_admins() {
 
     global $db;
@@ -540,6 +565,8 @@
     return $admin_set;
   }
 
+
+  // FIND ADMIN BY ID
   function find_admin_by_id($admin_id) {
 
     global $db;
@@ -556,6 +583,8 @@
     }
   }
 
+
+  // FIND ADMIN BY USERNAME
   function find_admin_by_username($username) {
 
     global $db;
@@ -572,6 +601,8 @@
     }
   }
 
+
+  // CREATE ADMIN
   function create_admin() {
 
     global $errors;
@@ -625,6 +656,8 @@
     }
   }
 
+
+  // UPDATE ADMIN
   function update_admin($current_admin) {
 
     global $errors;
@@ -679,6 +712,8 @@
     }
   }
 
+
+  // DELETE ADMIN
   function delete_admin($admin_id) {
 
     global $db;
@@ -707,6 +742,7 @@
 
   // * PASSWORD ENCRYPTION *
 
+
   // ENCRYPT PASSWORD USING BLOWFISH ALGORITHM AND SALT
   function password_encrypt($password) {
 
@@ -723,6 +759,8 @@
     return $hash;
   }
 
+
+  // GENERATE SALT FOR PASSWORD ENCRYPTION
   function generate_salt($length) {
 
     // Not 100% unique not 100% random but good enough for salt
@@ -741,6 +779,8 @@
     return $salt;
   }
 
+
+  // CHECK IF ENTERED PASSWORD MATCHES DB ENCRYPTED PASSWORD
   function password_check($password, $existing_hash) {
 
     // Existing hash contains format and salt at start
@@ -753,6 +793,8 @@
     }
   }
 
+
+  // ADMIN LOGIN
   function login() {
 
     global $username;
@@ -804,6 +846,8 @@
     }
   }
 
+
+  // CHECK IF PASSWORD AND USERNAME'S PASSWORD MATCH
   function attepmt_login($username, $password) {
 
     // Find admin
@@ -824,6 +868,7 @@
     }
   }
 
+
   // RETURNS IF USER IS LOGGED IN (T/F)
   function logged_in() {
     return isset($_SESSION["admin_id"]);
@@ -836,6 +881,8 @@
     }
   }
 
+
+  // LOGOUT
   function logout() {
     $_SESSION = array();
     $_SESSION["message"] = "Logout succsesfuly";

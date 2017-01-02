@@ -5,18 +5,21 @@
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
 <div id="main">
-  <div id="navigation">
-    &nbsp;
+
+  <div class="col-xs-12 col-msm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
+    <div class="jumbotron">
+      <div id="page">
+        <h1>Admin Menu</h1>
+        <p>Welcome to Admin area, <?php echo ucfirst(htmlentities($_SESSION["username"])); ?>.</p>
+        <ul>
+          <li><h3><a href="manage_content.php">Manage Website Content</a></h3></li>
+          <li><h3><a href="manage_admins.php">Manage Admin Users</a></h3></li>
+          <li><h3><a href="logout.php">Logout</a></h3></li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <div id="page">
-    <h2>Admin Menu</h2>
-    <p>Welcome to Admin area, <?php echo ucfirst(htmlentities($_SESSION["username"])); ?>.</p>
-    <ul>
-      <li><a href="manage_content.php">Manage Webasite Content</a></li>
-      <li><a href="manage_admins.php">Manage Admin Users</a></li>
-      <li><a href="logout.php">Logout</a></li>
-    </ul>
-  </div>
+
 </div>
 
 <?php include("../includes/layouts/footer.php"); // FOOTER ?>

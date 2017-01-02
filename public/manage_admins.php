@@ -6,35 +6,37 @@
 <?php $layout_content = "admin"; // ADMIN LAYOUT CONTEXT ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
-<div id="main">
+<div id="main" class="row">
 
-  <div id="navigation">
+  <div id="page" class="col-xs-12 col-msm-8 col-sm-offset-2 col-md-8 col-md-offset-3">
     <br />
-    <a href="admin.php">&laquo; Main Menu</a><br />
-  </div>
-
-  <div id="page">
-
     <?php echo message(); // Session Message (if any) ?>
-    <h2>Manage Admins</h2>
+    <h1>Manage Admins</h1><br />
 
-    <table>
-      <tr>
-        <th class="username">Username</th>
-        <th class="actions">Actions</th>
-      </tr>
+    <div class="row">
+      <div class="col-xs-8">
+        <table class="table table-striped table-hover">
+          <tr>
+            <th class="username">Username</th>
+            <th class="actions">Actions</th>
+            <th class="actions"></th>
+          </tr>
 
-      <?php while ($admin = mysqli_fetch_assoc($admin_set)) { ?>
-        <tr>
-          <td><?php echo htmlentities($admin["username"]); ?></td>
-          <td><a href="edit_admin.php?id=<?php echo urlencode($admin["id"]); ?>">Edit</a></td>
-          <td><a href="delete_admin.php?id=<?php echo urlencode($admin["id"]); ?>"
-            onclick="return confirm('Are you sure?')">Delete</a></td>
-        </tr>
-      <?php } ?>
-    </table>
+          <?php while ($admin = mysqli_fetch_assoc($admin_set)) { ?>
+            <tr>
+              <td><h4><?php echo htmlentities($admin["username"]); ?></h4></td>
+              <td><a class="btn btn-raised btn-primary btn-sm" href="edit_admin.php?id=<?php echo urlencode($admin["id"]); ?>"><i class="material-icons small">edit</i> Edit</a></td>
+              <td><a class="btn btn-raised btn-danger btn-sm" href="delete_admin.php?id=<?php echo urlencode($admin["id"]); ?>"
+                onclick="return confirm('Are you sure?')"><i class="material-icons small">delete</i> Delete</a></td>
+            </tr>
+          <?php } ?>
+        </table>
+      </div>
+    </div>
     <br />
-    + <a href="new_admin.php">Add new admin</a> &nbsp; <a href="manage_content.php">Cancel</a>
+    <a class="btn btn-raised btn-warning" href="new_admin.php">Add new admin</a> &nbsp; <a class="btn btn-raised" href="manage_content.php">Cancel</a>
+    <br />
+    <a class="btn btn-raised btn-default btn-sm" href="admin.php">&laquo; Main Menu</a><br />
 
   </div>
 </div>

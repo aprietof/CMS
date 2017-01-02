@@ -6,12 +6,14 @@
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 <?php find_selected_page(); // CHECK FOR PAGE CONTENT ?>
 
-<div id="main">
-  <div id="navigation">
+<div id="main" class="row">
+
+  <div class="side col-xs-3 menu">
+    <a class="btn btn-raised btn-sm" href="admin.php">&laquo; Main Menu</a><br />
     <?php echo navigation($current_subject, $current_page); ?>
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-9">
 
     <?php echo message(); // Session Message (if any) ?>
     <?php echo form_errors(errors()); // Session errors (if any) ?>
@@ -36,16 +38,16 @@
       </p>
 
       <p>Visible:
-        <input type="radio" name="visible" value="0">No
+        <input type="radio" name="visible" value="0"> No
         &nbsp;
-        <input type="radio" name="visible" value="1">Yes
+        <input type="radio" name="visible" value="1"> Yes
       </p>
 
-      <input type="submit" name="submit" value="Create Subject">
+      <input class="btn btn-raised btn-success" type="submit" name="submit" value="Create Subject">
 
     </form>
     <br />
-    <a href="manage_content.php">Cancel</a>
+    <a class="btn btn-raised btn-duefault" href="manage_content.php">Cancel</a>
 
   </div>
 </div>

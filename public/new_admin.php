@@ -11,29 +11,49 @@
     &nbsp;
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-12 col-md-8 col-md-offset-3">
 
     <?php echo message(); // Session Message (if any) ?>
     <?php echo form_errors(errors()); // Session errors (if any) ?>
     <h2>Create Admin</h2>
 
-    <form action="create_admin.php" method="post">
+    <div class="row">
+      <div class="col-xs-9">
 
-      <p>
-        Username: <br />
-        <input type="text" name="username" value="">
-      </p>
+        <form class="form-horizontal" action="create_admin.php" method="post">
+          <fieldset>
+            <div class="form-group">
+              <label for="inputUsername" class="col-md-2 control-label">Username</label>
 
-      <p>
-        Password: <br />
-        <input type="password" name="password" value="">
-      </p>
+              <div class="col-md-10">
+                <input type="text" class="form-control" name="username" id="inputEmail" placeholder="Username" value="">
+              </div>
+            </div>
 
-      <input type="submit" name="submit" value="Create admin">
+            <div class="form-group">
+              <label for="inputPassword" class="col-md-2 control-label">Password</label>
 
-    </form>
+              <div class="col-md-10">
+                <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" value="">
+              </div>
+            </div>
 
-    <a href="manage_admins.php">Cancel</a>
+            <div class="form-group">
+              <div class="col-md-10 col-md-offset-2">
+
+                <input class="btn btn-raised btn-success" type="submit" name="submit" value="Create admin">
+
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+    </div> <!-- end form row -->
+
+    <a href="manage_admins.php">&laquo; Back to Manage Admins</a><br />
+    <br />
+    <a href="admin.php">&laquo; Main Menu</a><br />
 
   </div>
 </div>

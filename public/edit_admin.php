@@ -15,7 +15,7 @@
     &nbsp;
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-12 col-md-8 col-md-offset-3">
 
     <?php if (!empty($message)) { echo "<div class=\"message\">" . htmlentities($message) . "</div>"; } // ERROR MESSAGE (IF ANY) ?>
     <?php echo form_errors($errors); // FORM ERRORS (IF ANY) ?>
@@ -25,26 +25,41 @@
     <?php echo message(); // Session Message (if any) ?>
     <?php echo form_errors(errors()); // Session errors (if any) ?>
 
-    <form action="edit_admin.php?id=<?php echo htmlentities($current_admin["id"]); ?>" method="post">
+    <div class="row">
+      <div class="col-xs-9">
+        <fieldset>
+          <form class="form-horizontal" action="edit_admin.php?id=<?php echo htmlentities($current_admin["id"]); ?>" method="post">
 
-      <p>
-        Username: <br />
-        <input type="text" name="username" value="<?php echo htmlentities($current_admin["username"]); ?>">
-      </p>
+            <div class="form-group">
+              <label for="inputUsername" class="col-md-2 control-label">Username</label>
 
-      <p>
-        Password: <br />
-        <input type="password" name="password" value="">
-      </p>
+              <div class="col-md-10">
+                <input type="text" class="form-control" name="username" id="inputEmail" placeholder="Username" value="<?php echo htmlentities($current_admin["username"]); ?>">
+              </div>
+            </div>
 
-      <input type="submit" name="submit" value="Update admin">
+            <div class="form-group">
+              <label for="inputPassword" class="col-md-2 control-label">Password</label>
 
-    </form>
+              <div class="col-md-10">
+                <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" value="">
+              </div>
+            </div>
 
-    <a href="manage_admins.php">Cancel</a>
+            <div class="form-group">
+              <div class="col-md-10 col-md-offset-2">
+                <input class="btn btn-raised btn-success" type="submit" name="submit" value="Update admin">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <a class="btn btn-raised btn-default" href="manage_admins.php">Cancel</a>
     &nbsp;
     &nbsp;
-    <a href="delete_admin.php?id=<?php echo urlencode($current_admin["id"]) ?>"
+    <a class="btn btn-raised btn-danger" href="delete_admin.php?id=<?php echo urlencode($current_admin["id"]) ?>"
       onclick="return confirm('Are you sure?')">Delete admin</a>
 
   </div>

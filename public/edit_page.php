@@ -9,20 +9,19 @@
 <?php $layout_content = "admin"; // ADMIN LAYOUT CONTEXT ?>
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
-<div id="main">
+<div id="main" class="row">
 
-  <div id="navigation">
+  <div class="side col-xs-3 menu">
     <?php echo navigation($current_subject, $current_page); ?>
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-9">
 
     <?php if (!empty($message)) { echo "<div class=\"message\">" . htmlentities($message) . "</div>"; } // ERROR MESSAGE (IF ANY) ?>
     <?php echo form_errors($errors); // FORM ERRORS (IF ANY) ?>
 
     <h2>Edit Page <?php echo htmlentities($current_page["menu_name"]); ?></h2>
 
-    <div class="edit-page">
       <form action="edit_page.php?page=<?php echo urlencode($current_page["id"]); ?>" method="post">
 
         <p>Menu Name:
@@ -48,28 +47,28 @@
 
         <p>Visible:
           <input type="radio" name="visible" value="0"
-          <?php if ($current_page["visible"] == 0) { echo " checked";} ?>>No
+          <?php if ($current_page["visible"] == 0) { echo " checked";} ?>> No
           &nbsp;
           <input type="radio" name="visible" value="1"
-          <?php if ($current_page["visible"] == 1) { echo " checked";} ?>>Yes
-        </p>
+          <?php if ($current_page["visible"] == 1) { echo " checked";} ?>> Yes
+        </p><br />
 
-        <p>Content:</p>
         <textarea id="mytextarea" name="content" rows="14" cols="100"><?php echo $current_page["content"]; ?>
         </textarea><br />
 
-        <input type="submit" name="submit" value="Update Page">
+        <input class="btn btn-raised btn-success" type="submit" name="submit" value="Update Page">
 
       </form>
-      <br />
-      <a href="manage_content.php?page=<?php echo urlencode($current_page["id"]) ?>">Cancel</a>
+
+      <a class="btn btn-raised btn-default" href="manage_content.php?page=<?php echo urlencode($current_page["id"]) ?>">Cancel</a>
       &nbsp;
       &nbsp;
-      <a href="delete_page.php?page=<?php echo urlencode($current_page["id"]) ?>"
-        onclick="return confirm('Are you sure?')">Delete Page</a>
-    </div> <!-- end edit page -->
+      <a class="btn btn-raised btn-danger" href="delete_page.php?page=<?php echo urlencode($current_page["id"]) ?>"
+        onclick="return confirm('Are you sure?')"><i class="material-icons">delete</i> Delete Page</a><br />
+        <br />
 
   </div>
+
 </div>
 
 <?php include("../includes/layouts/footer.php"); // FOOTER ?>

@@ -1,7 +1,9 @@
 <div id="footer">
-  &copy; Copyright <?php echo date("Y"); ?>, Widget Corp
+  &copy; Copyright <?php echo date("Y"); ?>, Adrian Prieto
 </div>
 
+  <!-- Javascript -->
+  <script src="js/index.js"></script>
 </body>
 </html>
 

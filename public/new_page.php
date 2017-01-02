@@ -7,12 +7,14 @@
 <?php find_selected_page(); // CHECK FOR PAGE CONTENT ?>
 <?php if (!isset($current_subject)) { redirect_to("manage_content.php"); } // REDIRECT IF NOT ASSOCIATED TO A SUBJECT ?>
 
-<div id="main">
-  <div id="navigation">
+<div id="main" class="row">
+
+  <div class="side col-xs-3 menu">
+    <a class="btn btn-raised btn-sm" href="admin.php">&laquo; Main Menu</a><br />
     <?php echo navigation($current_subject, $current_page); ?>
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-9">
 
     <?php echo message(); // Session Message (if any) ?>
     <?php echo form_errors(errors()); // Session errors (if any) ?>
@@ -38,20 +40,21 @@
       </p>
 
       <p>Visible:
-        <input type="radio" name="visible" value="0">No
+        <input type="radio" name="visible" value="0"> No
         &nbsp;
-        <input type="radio" name="visible" value="1">Yes
-      </p>
+        <input type="radio" name="visible" value="1"> Yes
+      </p><br />
 
-      <p>Content:</p>
       <textarea id="mytextarea" name="content" rows="14" cols="100"></textarea><br />
 
       <br />
-      <input type="submit" name="submit" value="Create Page">
-
+      <input class="btn btn-raised btn-success" type="submit" name="submit" value="Create Page">
     </form>
+
+    <a  class="btn btn-raised btn-default" href="manage_content.php?subject=<?php echo $current_subject["id"]; ?>">Cancel</a>
+
     <br />
-    <a href="manage_content.php?subject=<?php echo $current_subject["id"]; ?>">Cancel</a>
+    <br />
 
   </div>
 </div>

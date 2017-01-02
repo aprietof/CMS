@@ -12,29 +12,49 @@
     &nbsp;
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-12 col-msm-8 col-sm-offset-2 col-md-8 col-md-offset-3">
 
     <?php echo message(); // Session Message (if any) ?>
     <?php echo form_errors(errors()); // Session errors (if any) ?>
 
     <h2>Login</h2>
 
-    <form action="login.php" method="post">
+    <div class="row">
+      <div class="col-xs-9">
 
-      <p>
-        Username: <br />
-        <input type="text" name="username"
-        value=<?php echo htmlentities($username); // global $username from function ?>>
-      </p>
+        <form action="login.php" method="post">
 
-      <p>
-        Password: <br />
-        <input type="password" name="password" value="">
-      </p>
+          <div class="form-group">
+            <label for="inputUsername" class="col-md-2 control-label">Username</label>
 
-      <input type="submit" name="submit" value="Submit">
+            <div class="col-md-10">
+              <input type="text" class="form-control" name="username" id="inputEmail" placeholder="Username" value=<?php echo htmlentities($username); // global $username from function ?>>
+            </div>
+          </div>
 
-    </form>
+          <div class="form-group">
+            <label for="inputPassword" class="col-md-2 control-label">Password</label>
+
+            <div class="col-md-10">
+              <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" value="">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-10 col-md-offset-2">
+
+              <input class="btn btn-raised btn-success" type="submit" name="submit" value="Submit">
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div> <!-- end form row -->
+
+    <br />
+
+    <a href="index.php">&laquo; Back to site</a><br />
 
   </div>
 </div>

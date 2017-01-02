@@ -10,18 +10,21 @@
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 
 
-<div id="main">
+<div id="main" class="row">
 
-  <div id="navigation">
+  <div class="side col-xs-3 menu">
+    <a class="btn btn-raised btn-sm" href="admin.php">&laquo; Main Menu</a><br />
     <?php echo navigation($current_subject, $current_page); ?>
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-9">
 
     <?php if (!empty($message)) { echo "<div class=\"message\">" . htmlentities($message) . "</div>"; } // ERROR MESSAGE (IF ANY) ?>
     <?php echo form_errors($errors); // FORM ERRORS (IF ANY) ?>
 
     <h2>Edit Subject <?php echo htmlentities($current_subject["menu_name"]); ?></h2>
+
+    <br />
 
     <form action="edit_subject.php?subject=<?php echo urlencode($current_subject["id"]); ?>" method="post">
 
@@ -48,20 +51,20 @@
 
       <p>Visible:
         <input type="radio" name="visible" value="0"
-        <?php if ($current_subject["visible"] == 0) { echo " checked";} ?>>No
+        <?php if ($current_subject["visible"] == 0) { echo " checked";} ?>> No
         &nbsp;
         <input type="radio" name="visible" value="1"
-        <?php if ($current_subject["visible"] == 1) { echo " checked";} ?>>Yes
+        <?php if ($current_subject["visible"] == 1) { echo " checked";} ?>> Yes
       </p>
 
-      <input type="submit" name="submit" value="Update Subject">
+      <input class="btn btn-raised btn-success" type="submit" name="submit" value="Update Subject">
 
     </form>
     <br />
-    <a href="manage_content.php">Cancel</a>
+    <a class="btn btn-raised btn-default" href="manage_content.php">Cancel</a>
     &nbsp;
     &nbsp;
-    <a href="delete_subject.php?subject=<?php echo urlencode($current_subject["id"]) ?>"
+    <a class="btn btn-raised btn-danger" href="delete_subject.php?subject=<?php echo urlencode($current_subject["id"]) ?>"
       onclick="return confirm('Are you sure?')">Delete subject</a>
 
   </div>

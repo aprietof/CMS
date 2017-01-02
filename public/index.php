@@ -6,27 +6,27 @@
 <?php include("../includes/layouts/header.php"); // HEADER ?>
 <?php find_selected_page(true); ?>
 
-<div id="main">
+<div id="main" class="row">
 
-  <div id="navigation">
+  <div class="side col-xs-3 menu">
 		<?php echo public_navigation($current_subject, $current_page); ?>
   </div>
 
-  <div id="page">
+  <div id="page" class="col-xs-9">
 
-    <?php echo message(); // Session Message (if any) ?>
+      <?php echo message(); // Session Message (if any) ?>
 
-    <?php
-      if ($current_page) {
-        echo "<h2>" . htmlentities($current_page["menu_name"]) . "</h2>";
-        echo "<div>";
-        echo $current_page["content"];
-        echo "</div>";
+      <?php
+        if ($current_page) {
+          echo "<h2 class=\"index\">" . htmlentities($current_page["menu_name"]) . "</h2>";
+          echo "<div>";
+          echo $current_page["content"];
+          echo "</div>";
 
-      } else {
-        echo "<br />Welcome";
-      }
-    ?>
+        } else {
+          echo "<br />Welcome";
+        }
+      ?>
 
   </div>
 </div>

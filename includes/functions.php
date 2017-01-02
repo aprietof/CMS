@@ -17,8 +17,10 @@
   function form_errors($errors) {
     $html = "";
     if (!empty($errors)) {
-      $html .= "<div class='error'>";
-      $html .= "<p>Please fix the following errors</p>";
+      $html .= "<br />";
+      $html .= "<div class=\"alert alert-dismissible alert-danger\">";
+      $html .= "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button>";
+      $html .= "<p>Please fix the following errors and try submitting again.</p><br/>";
       $html .= "<ul>";
       foreach ($errors as $key => $error) {
         $html .= "<li>" . htmlentities($error) . "</li>";
